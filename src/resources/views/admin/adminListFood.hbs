@@ -1,0 +1,81 @@
+<section>
+    <div class="mt-5">
+        <h1> Thông tin món ăn</h1>
+    </div>
+</section>
+<section>
+    <div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Tên món ăn</th>
+      <th scope="col">Miêu tả</th>
+      <th scope="col">Giá</th>
+      <th scope="col">số lượng</th>
+      <th scope="col">ảnh</th>
+      <th scope="col">Thao tác</th>
+
+    </tr>
+  </thead>
+  
+
+{{#each foods}}
+  <tbody>
+    <tr>
+      <th scope="row">{{add @index 1}}</th>
+      <td>{{this.name}}</td>
+      <td>{{this.description}}</td>
+      <td>{{this.gia}}</td>
+      <td>{{this.soluong}}</td>
+      <td><a href="{{this.img}}" target="_blank">{{this.img}}</a></td>
+     <td>
+        <div>
+        <a href="/admin/{{this._id}}/editFood" class="btn btn-info">Sửa</a>
+        <button type="button" class="btn btn-danger"  data-bs-toggle="modal"  data-bs-target="#deleteFood" data-id="{{this._id}}" >Xóa</button>
+        </div>
+     </td>
+    </tr>
+  </tbody>
+  {{/each}}
+
+
+</section>
+{{!-- --------------- confirm delete --}}
+<!-- Modal -->
+<div class="modal fade" id="deleteFood" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận xóa thực đơn</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn xóa món ăn này?
+      </div>
+      <div class="modal-footer">
+        <button id="buttonDelete" type="button" class="btn btn-danger" >Xóa</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+{{!-- ---------- Form ẩn để xóa --}}
+<form name="deleteForm" method="POST" action ="/admin/{{food._id}}?_method=DELETE"></form>
+
+<script>
+  const deleteFood = document.getElementById('deleteFood')
+  var foodId;
+  if (deleteFood) {
+  deleteFood.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget
+    foodId = button.getAttribute('data-id');
+    console.log(foodId);
+  })
+  var btnDelete = document.getElementById('buttonDelete')
+  btnDelete.onclick = function (){
+    deleteForm.action = '/admin/'+foodId+'?_method=DELETE';
+    deleteForm.submit();
+  }
+}
+</script>

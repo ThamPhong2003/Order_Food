@@ -1,0 +1,35 @@
+ 
+    <main class="page lanidng-page">
+        <section class="clean-block clean-hero" style="color: rgba(0,159,255,0.85);background: url(&quot;assets/img/nature/LSFZYivT-vietnamese-sandwich-thumb.jpg&quot;) center / cover;"><span><br><br><br><br><br><br><br><br><br><br><br></span>
+            <div class="divsecter1">
+                <h2><strong><span style="background-color: rgb(251, 225, 90);">Bạn đang đói phải không?</span></strong></h2>
+                <p class="p1"><span style="color: rgb(0, 0, 0); background-color: rgb(251, 225, 90);">Ăn ngay cùng&nbsp; với MONANTOIYEU nhé!!</span></p>
+                <button id="scrollButton" class="btn btn-outline-light btn-lg btlg" type="reset">ĂN NGAYYYY</button>
+            </div>
+        </section>
+        <section class="portfolio-block photography">
+            <div  id="content" class="container ct1">
+                <div class="row g-0 row1">
+                     {{#each foods}}
+                    <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="{{this.slug}}"><img class="img-fluid image" src="{{this.img}}"></a>
+                        <div class="div1">
+                            <h1><br>{{this.name}}</h1><label class="form-label giatienlb">GIÁ:</label><label class="form-label text-uppercase text-primary lbgia">{{this.gia}}&nbsp;</label><label class="form-label lbgia1">Còn:</label><label class="form-label text-primary lbgia1">{{this.soluong}}</label>
+                            <p class="paramonan">{{this.description}}<br><br><br><br><br><br><br></p>
+                            <button class="btn btn-primary bt1" type="button"><i class="fa fa-spoon" style="font-size: 18px;"></i>&nbsp;Đặt món này</button>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </section>
+    </main>
+   <script>
+    // Lắng nghe sự kiện click trên nút
+    document.getElementById('scrollButton').addEventListener('click', function() {
+      // Lấy đối tượng phần tử cần cuộn đến
+      var contentElement = document.getElementById('content');
+
+      // Sử dụng phương thức scrollIntoView để cuộn đến phần tử đó
+      contentElement.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
