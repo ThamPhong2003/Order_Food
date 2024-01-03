@@ -1,0 +1,44 @@
+<main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Đăng nhập</h2>
+                </div>
+
+             <form class="shadow-lg form1" action="/login-check" method="POST" data-bs-theme="light" name ="loginForm">
+         <div class="mb-3">
+                <label class="form-label" for="username">Tên đăng nhập</label>
+                    <input class="form-control" type="text" name="username" required>
+            </div>
+  
+  
+         <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" name="password" required>
+        </div>
+  
+            
+            {{#if errorMessage}}
+                <div style="color: red; font-style: italic" >{{errorMessage}}</div>
+            {{/if}}
+
+
+        <div class="mb-3 mt-4">
+                <button class="btn btn-primary btn-lg d-block w-100" type="submit">Đăng nhập</button>
+            </div>
+
+            
+  <div><a class="link-primary" href="#"><em>Quên mật khẩu?</em></a></div>
+  
+  <div class="dvichuacotk">
+    <a class="link-primary dangkylink" href="/login/register">Đăng ký tài khoản</a>
+  </div>
+</form>
+
+
+            </div>
+        </section>
+    </main>
+
+
+  

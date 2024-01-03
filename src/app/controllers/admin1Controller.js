@@ -19,10 +19,13 @@ class admin1Controller {
       });
   }
 
+  
   //[GET] /admin/update ---> UI list thực đơn
   creatFood(req, res) {
     res.render('admin/adminCreat', { layout: 'admin-layout' });
   }
+
+
   //[GET] /admin/:id/editFood ---> UI sửa thực đơn
   editFood(req, res, next) {
     food.findById(req.params.id)
@@ -35,7 +38,7 @@ class admin1Controller {
     try {
       const newFood = new food(req.body);
       await newFood.save();
-      res.redirect('/admin/adminListFood');
+      res.redirect('/admin/ListFood');
     } catch (error) {
       console.error(error);
   

@@ -29,7 +29,37 @@
     <script src="/assets/js/pikaday.min.js"></script>
     <script src="/assets/js/theme.js"></script>
 </body>
+<script>
+    
+document.addEventListener('DOMContentLoaded', function() {
+    // Lấy element badge từ DOM
+    const badge = document.getElementById('badge');
 
+    // Khởi tạo biến đếm
+    var counts = 0;
+
+    // Lấy tất cả các button có class bt1
+    const increaseButtons = document.querySelectorAll('.bt1');
+
+    // Gắn sự kiện click cho mỗi button
+    increaseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Tăng giá trị biến đếm
+            counts++;
+
+            // Hiển thị giá trị mới trên badge
+            badge.innerText = counts;
+        });
+    });
+});
+
+
+
+
+</script>
+  
 </html>
+
+
 
  

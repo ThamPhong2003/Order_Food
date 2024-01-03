@@ -1,0 +1,48 @@
+
+
+    <main class="page product-page" class="">
+        <link rel="stylesheet" href="assetss/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i&amp;display=swap">
+    <link rel="stylesheet" href="assetss/fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="assetss/css/baguetteBox.min.css">
+    <link rel="stylesheet" href="assetss/css/vanilla-zoom.min.css">
+
+        <section class="clean-block clean-product dark">
+            <div class="container">
+                <div class="block-heading">
+                    <h2 class="text-info">CHI TIẾT</h2>
+                </div>
+                <div class="block-content">
+                    <div class="product-info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="gallery">
+                                    <div id="product-preview" class="vanilla-zoom">
+                                        {{#each foods}}
+                                        <div class="zoomed-image"></div>
+                                        <div class="sidebar"><img class="img-fluid d-block small-preview" src="{{this.img}}" width="60" height="60"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info">
+                                    <h3>{{this.name}}</h3>
+                                    <div class="price">
+                                        <h3>{{this.gia}}</h3>
+                                            {{/each}}
+                                    </div><button class="btn btn-primary" type="button" id="datmonan"><i class="icon-basket"></i>&nbsp;Đặt món này</button>
+                                    <div class="summary">
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="assetss/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assetss/js/baguetteBox.min.js"></script>
+    <script src="assetss/js/vanilla-zoom.js"></script>
+    <script src="assetss/js/theme.js"></script>

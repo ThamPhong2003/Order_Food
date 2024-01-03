@@ -7,9 +7,23 @@ const port = 3000;
 const db = require('./config/db/connectodb');
 const count = require('./app/controllers/handlebars-helper');
 const methodOverride = require('method-override')
+const session = require('express-session');
+
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'src', 'public')));
+
 db.connect();
+
+
+// Sử dụng session middleware
+app.use(session({
+  secret: 'your-secret-key', // Thay thế bằng một chuỗi bí mật an toàn
+  resave: false,
+  saveUninitialized: true,
+}));
+
+
 
 // tạo đối tượng router, giống như cái ổ cắm chung
 const route = require('./routes');
