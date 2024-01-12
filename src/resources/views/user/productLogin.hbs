@@ -13,13 +13,14 @@
                     <h2 class="text-info">CHI TIẾT</h2>
                 </div>
                 <div class="block-content">
+                                                           {{#each foods}}
+
                     <div class="product-info">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="gallery">
                                     <div id="product-preview" class="vanilla-zoom">
                                        
-                                       {{#each foods}}
                                         <div class="zoomed-image"></div>
                                         <div class="sidebar"><img class="img-fluid d-block small-preview" src="{{this.img}}" width="60" height="60"></div>
                                     </div>
@@ -30,16 +31,17 @@
                                     <h3>{{this.name}}</h3>
                                     <div class="price">
                                         <h3>{{this.gia}}</h3>
-                                          {{/each}}
-                                    </div><button class="btn btn-primary" type="button" id="datmonan"><i class="icon-basket"></i>&nbsp;Đặt món này</button>
+                                             <button class="btn btn-primary bt1" type="button" id="datmonan" onclick="orderFood('{{this._id}}', currentUserId)"><i class="icon-basket"></i>&nbsp;Đặt món này</button>
+
                                     <div class="summary">
-                                        <p></p>
+                                        <span>{{this.description}}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                 {{/each}}
             </div>
         </section>
     </main>
@@ -47,3 +49,47 @@
     <script src="/assetss/js/baguetteBox.min.js"></script>
     <script src="/assetss/js/vanilla-zoom.js"></script>
     <script src="/assetss/js/theme.js"></script>
+
+
+<script>
+  const currentUserId = '{{currentUser._id}}';
+</script>
+<script>
+function orderFood(foodId, userId) {
+    const formData = {
+        foodId: foodId,
+        userId: userId,
+        quantity: 1
+    };
+
+    fetch('/api/addToCart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+
+        // Cập nhật giao diện người dùng dựa trên kết quả phản hồi (data)
+        if (data.success) {
+            // Đối với ví dụ, bạn có thể cập nhật số lượng món ăn trong giỏ hàng
+            const cartQuantityElement = document.getElementById('cart-quantity');
+            if (cartQuantityElement) {
+                cartQuantityElement.innerText = data.cartQuantity; // Thay thế 'cartQuantity' bằng trường dữ liệu thích hợp trong phản hồi JSON
+            }
+
+            // Các bước khác cập nhật giao diện người dùng
+            // ...
+        } else {
+            // Xử lý lỗi nếu cần thiết
+            console.error('Error adding item to cart:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>

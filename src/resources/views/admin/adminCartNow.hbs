@@ -1,31 +1,78 @@
+<!-- Đơn đang chờ duyệt -->
 <div class="mt-5">
-        <h1>Đơn đang chờ duyệt</h1>
+  <h1>Đơn đang chờ duyệt</h1>
 </div>
+
 <div>
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">Ngày giờ</th>
-      <th scope="col">Đơn đặt</th>
-      <th scope="col">Người mua</th>
-      <th scope="col">Đơn giá</th>
-       <th scope="col">Xác nhận đơn</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">*</th>
-      <td>*</td>
-      <td>-</td>
-      <td>-</td>
-      <td>
-        <div>
-            <button type="button" class="btn btn-success">Done</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Ngày giờ</th>
+        <th scope="col">Đơn đặt</th>
+        <th scope="col">Người mua</th>
+        <th scope="col">Sdt</th>
+        <th scope="col">Đơn giá</th>
+        <th scope="col">Xác nhận đơn</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each bills}}
+      <tr>
+        <th>{{this.orderDate}}</th>
+        <td>
+          <!-- Chèn liên kết vào đây, bạn có thể thay đổi href để đưa đến trang khác -->
+          <a href="/admin/detail/{{this.slug}}">Chi tiết</a>
+        </td>
+        <td>{{this.buyerName}}</td>
+        <td>{{this.buyerPhone}}</td>
+        <td>{{this.totalAmount}}</td>
+        <td>
+          <div>
+        <button type="button" class="btn btn-success"  data-bs-toggle="modal"  data-bs-target="#doneFood" data-id="{{this._id}}" >Done</button>
             <button type="button" class="btn btn-danger">Hủy đơn</button>
-        </div>
-      </td>
-    </tr>
-  </tbody>
-  
-</table>
+          </div>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="doneFood" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận đơn hàng</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn đặt đơn hàng này?
+      </div>
+      <div class="modal-footer">
+        <button id="buttonDone" type="button" class="btn btn-success" >Done</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form name="deleteForm" method="POST" action ="/admin/{{bill._id}}?_method=DELETE"></form>
+
+
+<script>
+  const doneFood = document.getElementById('doneFood')
+  var billID;
+  if (doneFood) {
+  doneFood.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget
+    billID = button.getAttribute('data-id');
+    console.log(billID);
+  })
+    var btnDone = document.getElementById('buttonDone')
+  btnDone.onclick = function (){
+    deleteForm.action = '/admin/bill/'+billID+'?_method=DELETE';
+    deleteForm.submit();
+  }
+
+}
+</script>

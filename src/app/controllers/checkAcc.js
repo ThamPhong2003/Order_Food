@@ -47,7 +47,8 @@ class checkAcc {
       // If username is unique, create a new user and save it
       const newUser = new user(req.body);
       await newUser.save();
-  
+      
+      req.session.successMessage = 'Đăng ký thành công!';
       res.redirect('/login');
     } catch (error) {
       console.error(error);

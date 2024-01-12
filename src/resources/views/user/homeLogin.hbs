@@ -10,20 +10,73 @@
         <section class="portfolio-block photography">
             <div  id="content" class="container ct1">
                 <div class="row g-0 row1">
-                     {{#each foods}}
-                    <div class="col-md-6 col-lg-4 item zoom-on-hover"><a href="{{this._id}}/{{this.slug}}"><img class="img-fluid image" src="{{this.img}}"></a>
-                        <div class="div1">
-                            <h1><br>{{this.name}}</h1><label class="form-label giatienlb">GIÁ:</label><label class="form-label text-uppercase text-primary lbgia">{{this.gia}}&nbsp;</label><label class="form-label lbgia1">Còn:</label><label class="form-label text-primary lbgia1">{{this.soluong}}</label>
-                            <p class="paramonan">{{this.description}}<br><br><br><br><br><br><br></p>
-                            <button class="btn btn-primary bt1" type="button" id = "orderButton"><i class="fa fa-spoon" style="font-size: 18px;"></i>&nbsp;Đặt món này</button>
-                        </div>
-                    </div>
-                    {{/each}}
-                </div>
-            </div>
-        </section>
-    </main>
-   <script>
+        {{#each foods}}
+    <div class="col-md-6 col-lg-4 item zoom-on-hover">
+        <a href="{{this._id}}/{{this.slug}}">
+            <img class="img-fluid image" src="{{this.img}}">
+        </a>
+        <div class="div1">
+            <h1><br>{{this.name}}</h1>
+            <label class="form-label giatienlb">GIÁ:</label>
+            <label class="form-label text-uppercase text-primary lbgia">{{this.gia}}&nbsp;</label>
+            <label class="form-label lbgia1">Còn:</label>
+            <label class="form-label text-primary lbgia1">{{this.soluong}}</label>
+            <p class="paramonan">{{this.description}}<br><br><br><br><br><br><br></p>
+           <button class="btn btn-primary bt1" type="button" onclick="orderFood('{{this._id}}', currentUserId)">
+    <i class="fa fa-spoon" style="font-size: 18px;"></i>&nbsp;Đặt món này
+</button>
+
+        </div>
+    </div>
+{{/each}}
+</div>
+</div>
+</section>
+</main>
+<script>
+  const currentUserId = '{{currentUser._id}}';
+</script>
+<script>
+function orderFood(foodId, userId) {
+    const formData = {
+        foodId: foodId,
+        userId: userId,
+        quantity: 1
+    };
+
+    fetch('/api/addToCart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+
+        // Cập nhật giao diện người dùng dựa trên kết quả phản hồi (data)
+        if (data.success) {
+            // Đối với ví dụ, bạn có thể cập nhật số lượng món ăn trong giỏ hàng
+            const cartQuantityElement = document.getElementById('cart-quantity');
+            if (cartQuantityElement) {
+                cartQuantityElement.innerText = data.cartQuantity; // Thay thế 'cartQuantity' bằng trường dữ liệu thích hợp trong phản hồi JSON
+            }
+
+            // Các bước khác cập nhật giao diện người dùng
+            // ...
+        } else {
+            // Xử lý lỗi nếu cần thiết
+            console.error('Error adding item to cart:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+
+ <script>
     ////
     // Lắng nghe sự kiện click trên nút
     document.getElementById('scrollButton').addEventListener('click', function() {

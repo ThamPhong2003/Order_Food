@@ -1,0 +1,305 @@
+ <section class="clean-block clean-cart darkvkl">
+        <div class="container">
+            <div class="block-heading">
+                <h2 class="text-info">GIỎ HÀNG</h2>
+                <p>Các mặt hàng bạn đã thêm vào giỏ</p>
+            </div>
+            <div class="border rounded-0 shadow-lg content">
+                <div class="row g-0 rowcart">
+                    <div class="col-md-12 col-lg-8">
+{{#each userCart.items}}
+  <div class="items product" data-gia="{{this.food.gia}}" data-food-id="{{this.food._id}}">
+    <div class="product"> 
+      <div class="row justify-content-center align-items-center">
+        <div class="col-md-3">
+          <div class="product-image">
+            <img class="img-fluid d-block mx-auto image1" src="{{this.food.img}}" width="168" height="352">
+          </div>
+        </div>
+        <div class="col-md-5 product-info">
+          <div class="product-specs">
+            <span>{{this.food.name}}</span>
+            <span class="text-primary gia-span"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{{this.food.gia}}</span>
+          </div>
+        </div>
+        <div class="col-6 col-md-2 quantity">
+          <label class="form-label d-none d-md-block" for="quantity">Số lượng</label>
+        <input type="number" class="form-control quantity-input" value="{{this.quantity}}" data-food-id="{{this.food._id}}" onchange="updateTotalPrice(this.closest('.product'))">
+        </div>
+        <div class="col-6 col-md-2 price">
+          <div>
+            <span>Thành tiền:</span>
+          </div>
+          <div>
+            <span class="thanhtien"data-gia="{{this.food.gia}}">{{this.food.gia}}</span>
+          </div>
+        </div>
+        <div class="col-12 mt-3">
+          <button class="btn btn-danger aaa deleteFoodCart" type="button" data-id="{{this.food._id}}" data-bs-target="#deleteFoodCartModal">Xóa</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/each}}
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                        <div class="bg-body-tertiary summary">
+                            <h3 class="text-bg-success">Hóa đơn</h3>
+                            <h4 class="border-primary-subtle" style="border-color: var(--bs-primary-border-subtle);"><span class="text">Tổng:&nbsp;&nbsp;</span><span class="price">0</span></h4>
+                            <h4 class="border-primary-subtle" style="border-color: var(--bs-primary-border-subtle);"><span class="text">ĐC: {{currentUser.address}}</span></h4>
+                            <button class="btn btn-primary btn-lg d-block w-100eww" type="button">Đặt hàng</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    updateTotalBill();
+
+    const productList = document.querySelectorAll('.items.product');
+
+    productList.forEach(function(productElement) {
+      const quantityInput = productElement.querySelector('.quantity-input');
+      const foodId = quantityInput.dataset.foodId;
+
+      // Lưu giá trị vào lưu trữ phiên khi giá trị thay đổi
+      quantityInput.addEventListener('input', function() {
+        sessionStorage.setItem(`quantityValue-${foodId}`, this.value);
+
+        // Tính toán và cập nhật giá trị Thành tiền
+        updateTotalPrice(productElement);
+      });
+
+      // Khôi phục giá trị từ lưu trữ phiên khi trang được load
+      const savedQuantity = sessionStorage.getItem(`quantityValue-${foodId}`);
+      if (savedQuantity !== null) {
+        quantityInput.value = savedQuantity;
+        // Tính toán và cập nhật giá trị Thành tiền khi trang được load
+        updateTotalPrice(productElement);
+      }
+    });
+  });
+function updateTotalPrice(productElement) {
+    const quantityInput = productElement.querySelector('.quantity-input');
+    let quantity = parseFloat(quantityInput.value);
+
+    // Kiểm tra nếu quantity nhỏ hơn 1, đặt nó thành 1
+    if (isNaN(quantity) || quantity < 1) {
+        quantity = 1;
+        quantityInput.value = 1; // Đặt giá trị hiển thị trên input thành 1
+    }
+
+    const giaAttribute = productElement.dataset.gia;
+
+    if (giaAttribute) {
+        const gia = parseFloat(giaAttribute.replace('.', '').replace(',', '.'));
+
+        if (!isNaN(gia) && !isNaN(quantity)) {
+            const thanhTienElement = productElement.querySelector('.thanhtien');
+            const thanhTien = quantity * gia;
+
+            if (!isNaN(thanhTien)) {
+                thanhTienElement.textContent = thanhTien.toLocaleString();
+                // Cập nhật tổng giá trong hóa đơn
+                updateTotalBill();
+            } else {
+                console.error('Giá trị thanhTien là NaN.');
+            }
+        } else {
+            console.error('Giá trị gia hoặc quantity không hợp lệ.');
+        }
+    } else {
+        console.error('Thuộc tính dataset.gia không tồn tại.');
+    }
+}
+
+
+function updateTotalBill() {
+  const productList = document.querySelectorAll('.items.product');
+  let totalBill = 0;
+
+  productList.forEach(function(productElement) {
+    const thanhTienText = productElement.querySelector('.thanhtien').textContent;
+    const thanhTien = parseFloat(thanhTienText.replace(/,/g, '')); // Lấy giá trị số từ Thành tiền
+
+    if (!isNaN(thanhTien)) {
+      totalBill += thanhTien;
+    }
+  });
+
+  // Hiển thị tổng giá trong hóa đơn
+  const formattedTotalBill = totalBill.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  document.querySelector('.summary .price').textContent = formattedTotalBill + ".000";
+
+  // Log giá trị totalBill để kiểm tra
+  console.log('Total Bill:', totalBill);
+}
+
+
+
+</script>
+<!-- ... (phần HTML giữ nguyên) ... -->
+
+
+
+
+
+
+
+
+
+
+
+{{!-- // delete food khỏi cart --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.deleteFoodCart');
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const foodId = this.getAttribute('data-id');
+
+        // Gửi yêu cầu xóa đến API
+        fetch(`/api/deleteCartItem/${foodId}?_method=DELETE`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => {
+          if (response.ok) {
+            // Xử lý phản hồi từ máy chủ (nếu cần)
+            console.log('Food deleted successfully');
+
+            // Cập nhật tổng hóa đơn sau khi xóa
+            updateTotalBill();
+
+            // Cập nhật DOM
+            this.closest('.items').remove();  // Remove the deleted item from the DOM
+
+            // Refresh lại trang
+            location.reload();
+          } else {
+            console.error('Error:', response.status, response.statusText);
+          }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    });
+  });
+</script>
+
+
+
+
+<script>
+  // Giả sử currentUserString có giá trị như sau:
+  var currentUser ={{{JSONstringify currentUser}}};
+ var userCart = {{{JSONstringify userCart}}}
+</script>
+
+
+
+<!-- ... (phần HTML giữ nguyên) ... -->
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+  const placeOrderButton = document.querySelector('.btn.btn-primary.btn-lg');
+
+  placeOrderButton.addEventListener('click', async function () {
+    const isConfirmed = window.confirm('Bạn có muốn đặt hàng không?');
+
+    if (isConfirmed) {
+      try {
+        const orderItems = userCart.items.map(item => ({
+          foodName: item.food.name,
+          foodQuantity: item.quantity,
+          price: parseFloat(item.food.gia.replace(/,/g, '')) * 1000,
+        }));
+
+        const response = await fetch('/api/createBill', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderItems: orderItems,
+            buyerName: currentUser.fullname,
+            buyerPhone: currentUser.sdt,
+            totalAmount: calculateTotalAmountFromCart() * 1000,
+            userId: currentUser._id, // Thêm ID người dùng vào dữ liệu đơn hàng
+          }),
+        });
+
+        if (response.ok) {
+          // Cập nhật tổng giá trị trên giao diện
+          //clearCart(currentUser._id); // Thay currentUser.id bằng ID người dùng thực tế
+            clearCart(currentUser._id)
+            location.reload()
+          // Xóa toàn bộ giỏ hàng sau khi đặt hàng thành côn
+          alert('Đặt hàng thành công!');
+        } else {
+          alert('Có lỗi khi đặt hàng. Vui lòng thử lại sau.');
+        }
+      } catch (error) {
+        console.error('Lỗi khi gọi API đặt hàng:', error);
+        alert('Có lỗi khi đặt hàng. Vui lòng thử lại sau.');
+      }
+    } else {
+      alert('Đã hủy đặt hàng.');
+    }
+  });
+});
+///
+function clearCart(userId) {
+    // Gửi yêu cầu xóa giỏ hàng của người dùng hiện tại đến API
+    fetch(`/api/clearCart/${userId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            // Xử lý phản hồi từ máy chủ (nếu cần)
+            console.log('Cart cleared successfully');
+        } else {
+            console.error('Error:', response.status, response.statusText);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+//
+
+
+function updateTotalBill() {
+  const totalBillElement = document.querySelector('.summary .price');
+  const totalAmount = calculateTotalAmountFromCart();
+
+  if (totalBillElement && typeof totalAmount === 'number') {
+    const formattedTotalBill = totalAmount.toFixed(3).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    totalBillElement.textContent = formattedTotalBill ;
+  }
+}
+
+function calculateTotalAmountFromCart() {
+  const cartItems = document.querySelectorAll('.items.product');
+  let totalAmount = 0;
+
+  cartItems.forEach(cartItem => {
+    const itemPrice = parseFloat(cartItem.querySelector('.thanhtien').textContent.replace(/,/g, ''));
+    totalAmount += isNaN(itemPrice) ? 0 : itemPrice;
+  });
+
+  return totalAmount;
+}
+</script>

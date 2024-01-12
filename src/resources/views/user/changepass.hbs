@@ -1,0 +1,130 @@
+<section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{currentUser.fullname}}</h5>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body p-0">
+           <ul class="list-group list-group-flush rounded-3">
+                <li class="list-group-item">
+                <a href="/loged-in/{{currentUser._id}}/infor" class="nav-link d-flex justify-content-between align-items-center p-3">
+                  <i class="fa fa-home fa-lg" style="color: #007bff;"></i>
+                  <span class="mb-0">Trang chủ</span>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="/loged-in/{{currentUser._id}}/infor/changeInfor" class="nav-link d-flex justify-content-between align-items-center p-3">
+                  <i class="fa fa-user fa-lg" style="color: #007bff;"></i>
+                  <span class="mb-0">Thay đổi thông tin hiển thị</span>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="/loged-in/{{currentUser._id}}/infor/changePass" class="nav-link d-flex justify-content-between align-items-center p-3">
+                  <i class="fa fa-lock fa-lg" style="color: #28a745;"></i>
+                  <span class="mb-0">Đổi mật khẩu</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="col-lg-8">
+         <form method="POST" action="/loged-in/{{currentUser._id}}/infor/changePass/action?_method=PUT" class="border rounded border-0 shadow-lg p-3 p-md-5" data-bs-theme="light" name="changeInfor">
+    <div class="mb-3">
+      <label class="form-label">Mật khẩu hiện tại</label>
+      <input class="form-control" type="password" id="password" name="password">
+       {{#if passwordError}}
+  <div class="alert alert-danger" role="alert">
+    {{passwordError}}
+  </div>
+{{/if}}
+      
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Nhập mật khẩu mới</label>
+      <input class="form-control" type="password" id="newPassword" name="newPassword">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Nhập lại mật khẩu mới</label>
+      <input class="form-control" type="password" id="confirmPassword" name="confirmPassword">
+      <small id="passwordMismatch" class="text-danger d-none">Mật khẩu nhập lại không khớp.</small>
+      <small id="emptyFields" class="text-danger d-none">Vui lòng điền đầy đủ thông tin.</small>
+    </div>
+    <div class="row">
+      <div class="col-md-6 button">
+        <button class="btn btn-primary d-block w-100" type="button" data-bs-toggle="modal" data-bs-target="#confirm">Cập nhật</button>
+      </div>
+    </div>
+  </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="modal fade" id="confirm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Xác nhận cập nhật thông tin</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn cập nhật thông tin này?
+      </div>
+      <div class="modal-footer">
+        <button id="buttonDone" type="button" class="btn btn-success">Đồng ý</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const confirm = document.getElementById('confirm');
+  if (confirm) {
+    confirm.addEventListener('show.bs.modal', event => {
+
+    });
+
+    var btnDone = document.getElementById('buttonDone');
+    btnDone.onclick = function () {
+      // Kiểm tra nếu mật khẩu nhập lại khớp với mật khẩu mới và không có ô nào đang trống thì submit form
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const password = document.getElementById('password').value;
+
+      if (newPassword !== '' && confirmPassword !== '' && password !== '' && newPassword === confirmPassword) {
+        document.getElementById('emptyFields').classList.add('d-none');
+        document.getElementById('passwordMismatch').classList.add('d-none');
+        document.forms["changeInfor"].submit();
+      } else {
+        // Nếu có ô nào đang trống hoặc mật khẩu không khớp, hiển thị thông báo
+        document.getElementById('emptyFields').classList.remove('d-none');
+        document.getElementById('passwordMismatch').classList.add('d-none');
+      }
+    };
+  }
+</script>

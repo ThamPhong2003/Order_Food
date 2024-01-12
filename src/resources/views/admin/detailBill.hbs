@@ -1,0 +1,49 @@
+<section class="clean-block clean-cart darkvkl">
+        <div class="container">
+            <div class="block-heading">
+                                            {{#each bills}}
+
+                <h2 class="text-info">CHI TIẾT ĐƠN HÀNG CỦA KHÁCH CÓ TÊN:&nbsp; {{this.buyerName}}</h2>
+                                    {{/each}}
+
+            </div>
+
+
+{{#each bills}}
+    <div class="border rounded-0 shadow-lg content">
+        <div class="row g-0 rowcart">
+            <div class="col-md-12 col-lg-8">
+                <div class="items">
+                    {{#each orderItems}}
+                        <div class="product">
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-md-3">
+                                    <div class="product-image">
+                                    </div>
+                                </div>
+                                <div class="col-md-5 product-info">
+                                    <div class="product-specs">
+                                        <span>{{this.foodName}}</span>
+                                        <span class="text-primary">
+                                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{{this.price}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-2 quantity">
+                                    <label class="form-label d-none d-md-block" for="quantity">Số lượng</label>
+                                    <input type="number" id="number-1" class="form-control quantity-input" value="{{this.foodQuantity}}">
+                                </div>
+                                <div class="col-6 col-md-2 price">
+                                    <div><span>Thành tiền:</span></div>
+<div><span>{{multiply this.foodQuantity this.price}}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+{{/each}}
+        </div>
+    </section>

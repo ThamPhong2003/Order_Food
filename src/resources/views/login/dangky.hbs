@@ -11,12 +11,17 @@
                     <div class="mb-3"><label class="form-label" >Tên đăng nhập</label><input class="form-control" id="username" name="username"></div>
 
               
+
+
             {{#if errorMessage}}
                 <div style="color: red; font-style: italic" >{{errorMessage}}</div>
             {{/if}}
 
+
+
                     <div class="mb-3"><label class="form-label" >Mật khẩu</label><input class="form-control" type="password" id="password" name="password"></div>
                     <div class="mb-3"><label class="form-label">Nhập lại mật khẩu</label><input class="form-control" type="password" id="confirmpassword" name="confirmpassword"></div>
+                    <div class="mb-3"><label class="form-label" >Số điện thoại</label><input class="form-control" type="text" id="sdt" name="sdt"></div>
                     <div class="mb-3"><label class="form-label" >Địa chỉ</label><input class="form-control" type="text" id="address" name="address"></div>
                     <div class="mb-3">
                         <div class="row">
@@ -24,13 +29,11 @@
                         </div>
                     </div>
                 </form>
-
-
-
             </div>
             </div>
         </section>
     </main>
+    
 <script>
   function validateForm() {
     // Không được để trống địa chỉ
@@ -49,8 +52,21 @@
       alert("Mật khẩu và xác nhận mật khẩu không khớp.");
       return false;
     }
-
-    return true; // Trả về true khi không có lỗi
+    
+    // Trả về true khi không có lỗi
+    return true;
   }
+
+ function onSubmitForm() {
+  // Kiểm tra nếu validateForm() trả về true thì hiển thị thông báo thành công
+  if (validateForm()) {
+    console.log("Đăng ký thành công!"); // Thêm dòng này
+    alert("Đăng ký thành công!");
+  } else {
+    // Nếu có lỗi, không làm gì cả hoặc thực hiện các xử lý khác nếu cần
+  }
+}
+
 </script>
+
 

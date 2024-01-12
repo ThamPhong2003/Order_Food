@@ -3,6 +3,7 @@ const siteGuessRouter = require('./siteGuess');
 const admin1Router = require('./admin1');
 const loginCheckController = require('./loginCheck')
 const register = require('./register')
+const addToCart = require('./api')
 function route(app) {
     
     /// router admin
@@ -20,6 +21,8 @@ function route(app) {
     //user khách
     app.use('/', siteGuessRouter);
 
+    //add to cart
+    app.use('/api', addToCart);
 
     
 }

@@ -1,0 +1,82 @@
+<!-- Đơn đang chờ duyệt -->
+<div class="mt-5">
+  <h1>Lịch sử đơn hàng</h1>
+</div>
+
+<div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Ngày giờ</th>
+        <th scope="col">Đơn đặt</th>
+        <th scope="col">Người mua</th>
+        <th scope="col">Sdt</th>
+        <th scope="col">Đơn giá</th>
+        <th scope="col">Xác nhận đơn</th>
+                <th scope="col">Thao tác</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {{#each billhstrs}}
+      <tr>
+        <th>{{this.orderDate}}</th>
+        <td>
+          <!-- Chèn liên kết vào đây, bạn có thể thay đổi href để đưa đến trang khác -->
+          <a href="/admin/detailBillHistory/{{this.slug}}">Chi tiết</a>
+        </td>
+        <td>{{this.buyerName}}</td>
+        <td>{{this.buyerPhone}}</td>
+        <td>{{this.totalAmount}}</td>
+        <td>
+          Đã gửi ship
+        </td>
+                <td>
+                            <button type="button" class="btn btn-danger"  data-bs-toggle="modal"  data-bs-target="#doneFood" data-id="{{this._id}}" >Xóa</button>
+
+                </td>
+
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="doneFood" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa lịch sử đặt hàng này</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn xóa lịch sử đơn hàng này?
+      </div>
+      <div class="modal-footer">
+        <button id="buttonDone" type="button" class="btn btn-danger" >OK</button>
+        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form name="deleteForm" method="POST" action ="/admin/{{bill._id}}?_method=DELETE"></form>
+
+
+<script>
+  const doneFood = document.getElementById('doneFood')
+  var billHisotryID;
+  if (doneFood) {
+  doneFood.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget
+    billHisotryID = button.getAttribute('data-id');
+    console.log(billHisotryID);
+  })
+    var btnDone = document.getElementById('buttonDone')
+  btnDone.onclick = function (){
+    deleteForm.action = '/admin/billHistory/'+billHisotryID+'?_method=DELETE';
+    deleteForm.submit();
+  }
+
+}
+</script>
